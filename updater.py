@@ -1434,10 +1434,8 @@ class UpdaterConsole(QDialog):
                 pass
             else:
                 self.execute_query('UPDATE ' + t + ' SET ' + c + '=%s', (v,))
-            # stdio.log_write('update.log', 'alter table: ' + t + '/' + c)
         else:
             pass
-            # stdio.log_write('update.log', 'exist: ' + t + '/' + c)
     
     def output_query_one(self, sql, data):
         try:
@@ -1472,7 +1470,6 @@ class UpdaterConsole(QDialog):
             cur.close()
             conn.close()
         except Exception as e:
-            # stdio.log_write('update.log', 'execute_query\n' + str(e) + '\n -- SQL run Error --\n ' + sql)
             self.PRINT("{0:>6}".format(gl.version) + ':<font color="red"> Erro SQL @ ' + sql[:60] + '</font>')
     
     def execute_sql(self, sql):
@@ -1485,7 +1482,6 @@ class UpdaterConsole(QDialog):
             cur.close()
             conn.close()
         except Exception as e:
-            # stdio.log_write('update.log', 'execute_sql\n' + str(e) + '\n -- SQL run Error --\n ' + sql)
             try:
                 self.PRINT("{0:>6}".format(gl.version) + ':<font color="red"> Erro SQL @ ' + sql[:65] + '</font>')
             except UnicodeDecodeError:
@@ -1512,9 +1508,7 @@ class UpdaterConsole(QDialog):
                   active int2 DEFAULT 0,\
                   CONSTRAINT rtables_cards_pkey PRIMARY KEY (id))WITHOUT OIDS'
             self.execute_sql(sql)
-            # stdio.log_write('update.log', 'create table rtables_cards')
             self.execute_sql('ALTER TABLE rtables_cards OWNER TO insoft')
-            # stdio.log_write('update.log', 'alter table owner to insoft')
     
     def createTable_extras_articles(self):
         sql = 'CREATE TABLE extras_articles (master_articles_id int4 NOT NULL DEFAULT 0,\
@@ -1596,7 +1590,10 @@ class UpdaterConsole(QDialog):
             else:
                 msg_dic = {'sub': 'UPDATE posto ' + str(gl.pos_ini['posid']) + ' de ' + gl.saftname + ' para ' + gl.version, 'body': report_html}
             # para onde enviar o mail
-            stdio.send_mail_html(['assistencias@espiridiao.net'], msg_dic)
+            xl = stdio.send_mail_html(['assistencias@espiridiao.net'], msg_dic)
+            if not xl[0]:
+                QMessageBox.warning(None, self.trUtf8("Erro de envio do mail"), self.trUtf8(xl[1]))
+                sys.exit(0)
         else:
             self.PRINT('<font color="#85C3FE">não envia e-mail')
     

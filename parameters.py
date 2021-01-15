@@ -69,8 +69,8 @@ mail_pass_internal = ''
 mail_server_internal = ''
 mail_user_internal = ''
 saft_years_list = ['2021','2020','2019','2018','2017','2016','2015', '2014','2013','2012']
-SUPER = True
-VERSION = '07.01.2021'
+SUPER = False
+VERSION = '15.01.2021'
 
 if __name__ == '__main__':
     pass

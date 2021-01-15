@@ -94,10 +94,10 @@ class BackupToFtp(QDialog):
 
     def send_ftp(self, file_list):
         t0 = time.time()
-        session = ftplib.FTP()
-        session.connect(gl.malaristix[0] , 21)
-        session.login(gl.malaristix[1] , gl.malaristix[2])
         try:
+            session = ftplib.FTP()
+            session.connect(gl.malaristix[0] , 21)
+            session.login(gl.malaristix[1] , gl.malaristix[2])
             session.mkd('/' + gl.saftnif +'/')
             session.cwd('/' + gl.saftnif +'/')
         except Exception as resp:

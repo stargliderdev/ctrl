@@ -141,15 +141,13 @@ def get_params():
 
 
 def send_mail_html(to, msg_headers):
-    smtpserver = gl.mail_server_internal # 'mail.espiridiao.net'
-    smtpuser = gl.mail_user_internal # 'assistencias@espiridiao.net'
-    password = gl.mail_pass_internal # 'O9%3NwETT~|[s78'
-    a = 'QEF!tp;7!3wh'
+    smtpserver = gl.mail_server_internal
+    smtpuser = gl.mail_user_internal
     try:
         SUBJECT = msg_headers['sub']
         msg = MIMEMultipart()
         msg['Subject'] = SUBJECT
-        msg['From'] = gl.mail_pass_internal  # 'assistencias@espiridiao.net'
+        msg['From'] = gl.mail_user_internal
         msg['To'] = ','.join(to)
         text = msg_headers['body']
         part1 = MIMEText(text, 'html', 'UTF-8')
@@ -158,12 +156,11 @@ def send_mail_html(to, msg_headers):
         session.ehlo()
         session.starttls()
         session.ehlo()
-        flag = (True, '')
-        session.login(smtpuser, a)
+        session.login(smtpuser, gl.mail_pass_internal)
         smtpresult = session.sendmail(gl.mail_user_internal, to, msg.as_string())
+        return True, 'OK'
     except Exception as e:
-        flag = False, str(e)
-    return flag, 'OK'
+        return False, str(e)
 
 
 def seconds_to_hours(bc):
@@ -424,8 +421,6 @@ def check_bin_dates():
     gl.bin_report_table = []
     dir = 'c://insoft/'
     bin_files = ['pos', 'lprinter', 'rdispatcher', 'posback', 'mansaft', 'rprinter']
-    # self.PRINT('<font color="magenta">   *** datas dos executaveis ***')
-    # self.PRINT(base64.b64decode('ICAgKioqIGRhdGFzIGRvcyBleGVjdXRhdmVpcyAqKio='))
     gl.bin_report.append('  *** datas dos executaveis ***')
     
     for n in bin_files:
@@ -511,10 +506,6 @@ def zip_file(filename):
     if not file_ok(dum + '.gz'):
         os.rename(filename + '.gz', dum + '.gz', )
     return dum + '.gz'
-
-# def unrar(text):
-#     dum2 = Fernet(b'y6E2FGsFHov1FcTKnXReUwTEm0P_sbOHFniE90tXtO0=')
-#     return dum2.decrypt(text)
 
 def compress_file(file_name):
     compression = zipfile.ZIP_DEFLATED
